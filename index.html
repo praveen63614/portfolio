@@ -4,75 +4,446 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Praveen Poddar | Portfolio</title>
+  <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/000000/developer.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('universe-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    body.fade-in { opacity: 1; }
+    .project-card:hover { box-shadow: 0 8px 32px 0 #a21caf55, 0 1.5px 8px 0 #f472b655; transform: translateY(-6px) scale(1.03); transition: all 0.25s; border-color: #f472b6; }
+    .glass {
+      background: rgba(36, 18, 60, 0.55);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      box-shadow: 0 4px 32px 0 #a21caf22;
+      backdrop-filter: blur(16px);
+    }
+    .glass-light {
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      box-shadow: 0 2px 16px 0 #f472b622;
+      backdrop-filter: blur(8px);
+    }
+    .fade-in-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; }
+    .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+    .glow-btn {
+      box-shadow: 0 0 0 #f472b6;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .glow-btn:hover, .glow-btn:focus {
+      box-shadow: 0 0 16px 2px #f472b6, 0 0 32px 4px #a21caf;
+      transform: scale(1.05);
+    }
+    .icon-animate:hover, .icon-animate:focus { animation: pulse 0.7s; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.18) rotate(-8deg); }
+      100% { transform: scale(1); }
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 10px; background: #231942; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #a21caf 0%, #f472b6 100%); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #f472b6; }
+    /* Responsive padding for mobile */
+    @media (max-width: 640px) {
+      .section-pad { padding-left: 0.5rem; padding-right: 0.5rem; }
+    }
+    .navbar-blur { backdrop-filter: blur(8px); background: rgba(255,255,255,0.85); }
+    .social-tooltip {
+      position: absolute;
+      background: #6d28d9;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-120%);
+      transition: opacity 0.2s;
+      z-index: 10;
+    }
+    .social-icon:hover .social-tooltip, .social-icon:focus .social-tooltip { opacity: 1; }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.5em;
+    }
+    h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 2.8rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .hero-subtitle {
+      font-size: 1.3rem;
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .body-text, p, li, input, textarea, button {
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    .project-card h4 {
+      font-size: 1.25rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .glass h2, .glass h3, .glass h4 {
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    .glass p, .glass li {
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    }
+    .footer, footer, .footer * {
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    }
+  </style>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('fade-in');
+      // Section fade-in on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+    });
+  </script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="text-white font-sans" style="background: linear-gradient(135deg, #0a0618 0%, #18122B 60%, #2d0a3a 100%); min-height: 100vh; position: relative; overflow-x: hidden;">
 
   <!-- Navbar -->
-  <header class="bg-white shadow sticky top-0 z-50">
+  <header class="navbar-blur shadow border-b border-pink-400/30 sticky top-0 z-50" style="background: rgba(24,18,43,0.85);">
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-purple-700">Praveen Poddar</h1>
-      <nav class="space-x-6 text-sm font-medium">
-        <a href="#about" class="hover:text-purple-600">About</a>
-        <a href="#projects" class="hover:text-purple-600">Projects</a>
-        <a href="#contact" class="hover:text-purple-600">Contact</a>
+      <div class="flex items-center gap-2">
+        <img src="https://avatars.githubusercontent.com/u/9919?s=40&v=4" alt="Logo" class="w-8 h-8 rounded-full border-2 border-purple-200" />
+        <h1 class="text-xl font-bold text-pink-400">Praveen Poddar</h1>
+      </div>
+      <nav id="navbar" class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="#skills" class="nav-link hover:text-pink-400 focus:outline-none focus:text-pink-300" aria-label="Skills section">Skills</a>
+        <a href="#projects" class="nav-link hover:text-pink-400 focus:outline-none focus:text-pink-300" aria-label="Projects section">Projects</a>
+        <a href="#contact" class="nav-link hover:text-pink-400 focus:outline-none focus:text-pink-300" aria-label="Contact section">Contact</a>
       </nav>
+      <!-- Hamburger -->
+      <button id="menuBtn" class="md:hidden flex items-center px-2 py-1 border rounded text-purple-700 border-purple-200 hover:bg-purple-50 focus:outline-none" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
+    <!-- Mobile Menu -->
+    <nav id="mobileMenu" class="md:hidden fixed top-0 left-0 w-full h-full bg-white bg-opacity-95 z-50 flex flex-col items-center justify-center space-y-8 text-lg font-medium transition-all duration-300 opacity-0 pointer-events-none" aria-label="Mobile navigation">
+      <a href="#about" class="nav-link block" tabindex="0">About</a>
+      <a href="#skills" class="nav-link block" tabindex="0">Skills</a>
+      <a href="#projects" class="nav-link block" tabindex="0">Projects</a>
+      <a href="#contact" class="nav-link block" tabindex="0">Contact</a>
+      <button id="closeMenu" class="mt-8 px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 focus:outline-none">Close</button>
+    </nav>
+    <script>
+      // Hamburger menu toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMenu = document.getElementById('closeMenu');
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.style.opacity = '1';
+        mobileMenu.style.pointerEvents = 'auto';
+        menuBtn.setAttribute('aria-expanded', 'true');
+      });
+      closeMenu.addEventListener('click', () => {
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.pointerEvents = 'none';
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+      // Close mobile menu on link click
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.style.opacity = '0';
+          mobileMenu.style.pointerEvents = 'none';
+          menuBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+      // Highlight active nav link on scroll
+      const sections = ['about', 'skills', 'projects', 'contact'];
+      const navLinks = document.querySelectorAll('.nav-link');
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(id => {
+          const section = document.getElementById(id);
+          if (section && window.scrollY >= section.offsetTop - 80) {
+            current = id;
+          }
+        });
+        navLinks.forEach(link => {
+          link.classList.remove('text-purple-900', 'font-bold', 'underline');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('text-purple-900', 'font-bold', 'underline');
+          }
+        });
+      });
+    </script>
   </header>
 
   <!-- Hero -->
-  <section class="text-center py-20 bg-purple-100">
-    <h2 class="text-4xl font-bold mb-4">Hi, I'm Praveen 👋</h2>
-    <p class="text-lg text-gray-700 mb-6">A passionate full-stack web developer from India</p>
-    <a href="#contact" class="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition">Contact Me</a>
+  <section class="relative text-center py-20 bg-gradient-to-b from-[#18122B] via-[#A21CAF]/30 to-transparent overflow-hidden fade-in-up">
+    <!-- Animated SVG Waves -->
+    <svg class="absolute left-0 top-0 w-full h-32 -z-10" viewBox="0 0 1440 320"><path fill="#F472B6" fill-opacity="0.18" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+    <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile" class="mx-auto w-28 h-28 rounded-full shadow-lg mb-4 border-4 border-white" />
+    <h2 class="hero-title mb-2">Hi, I'm Praveen 👋</h2>
+    <p class="hero-subtitle text-pink-400 mb-2 font-semibold">Full-Stack Developer & Startup Founder</p>
+    <p class="body-text text-gray-200 mb-6">A passionate full-stack web developer from India</p>
+    <div class="flex justify-center space-x-4 mb-6 relative">
+      <a href="https://github.com/" target="_blank" class="hover:text-pink-400 social-icon relative" aria-label="GitHub" tabindex="0">
+        <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.7.42.36.79 1.09.79 2.2 0 1.59-.01 2.87-.01 3.26 0 .31.21.68.8.56C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg>
+        <span class="social-tooltip">GitHub</span>
+      </a>
+      <a href="https:www.linkedin.com/in/praveen-poddar-474384230/" target="_blank" class="hover:text-pink-400 social-icon relative" aria-label="LinkedIn" tabindex="0">
+        <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 11.28h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.88v1.36h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v5.59z"/></svg>
+        <span class="social-tooltip">LinkedIn</span>
+      </a>
+      <a href="mailto:praveenpoddar176@gmail.com" class="hover:text-pink-400 social-icon relative" aria-label="Email" tabindex="0">
+        <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 13.065l-8-6.065v12h16v-12l-8 6.065zm8-8.065h-16c-1.104 0-2 .896-2 2v.217l10 7.583 10-7.583v-.217c0-1.104-.896-2-2-2z"/></svg>
+        <span class="social-tooltip">Email</span>
+      </a>
+    </div>
+    <a href="#contact" class="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-400 text-white px-6 py-2 rounded-full shadow-lg hover:from-pink-400 hover:to-purple-600 transition font-semibold">Contact Me</a>
   </section>
 
-  <!-- About -->
-  <section id="about" class="max-w-4xl mx-auto py-16 px-6">
-    <h3 class="text-2xl font-bold mb-4 text-purple-700">About Me</h3>
-    <p class="text-gray-700 leading-relaxed">
-      I'm a web developer with experience in building full-stack applications using technologies like HTML, CSS, JavaScript, Node.js, React, and MongoDB. I enjoy solving real-world problems with clean UI and efficient backend systems. I also run my own startup called <strong>Moskey</strong>, helping users find the best tech services in India.
-    </p>
-  </section>
-
-  <!-- Projects -->
-  <section id="projects" class="bg-white py-16 px-6">
-    <div class="max-w-5xl mx-auto">
-      <h3 class="text-2xl font-bold mb-10 text-purple-700">Projects</h3>
-      <div class="grid md:grid-cols-2 gap-8">
-        <!-- Project 1 -->
-        <div class="bg-gray-50 rounded-xl p-6 shadow">
-          <h4 class="font-semibold text-lg mb-2">Moskey</h4>
-          <p class="text-sm text-gray-600 mb-3">A platform to choose and book IT services tailored to your needs. Includes hardware services, software training, and custom support.</p>
-          <a href="#" class="text-purple-600 text-sm font-medium hover:underline">Visit Site →</a>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="bg-gray-50 rounded-xl p-6 shadow">
-          <h4 class="font-semibold text-lg mb-2">Green Line Biryani</h4>
-          <p class="text-sm text-gray-600 mb-3">Website for a local restaurant famous for its biryani. Menu, orders, and customer reviews all in one place.</p>
-          <a href="#" class="text-purple-600 text-sm font-medium hover:underline">View Project →</a>
-        </div>
-
-        <!-- Add more projects as needed -->
+  <!-- Skills -->
+  <section id="skills" class="max-w-4xl mx-auto py-16 px-6 fade-in-up section-pad">
+    <h3 class="section-title mb-4 text-pink-400">Skills</h3>
+    <div class="flex flex-wrap gap-6 justify-center">
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/html-5.png" alt="HTML5" class="w-12 h-12" />
+        <span class="text-xs mt-1">HTML5</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS3" class="w-12 h-12" />
+        <span class="text-xs mt-1">CSS3</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/javascript.png" alt="JavaScript" class="w-12 h-12" />
+        <span class="text-xs mt-1">JavaScript</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/react-native.png" alt="React" class="w-12 h-12" />
+        <span class="text-xs mt-1">React</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/nodejs.png" alt="Node.js" class="w-12 h-12" />
+        <span class="text-xs mt-1">Node.js</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/mongodb.png" alt="MongoDB" class="w-12 h-12" />
+        <span class="text-xs mt-1">MongoDB</span>
+      </div>
+      <div class="flex flex-col items-center glass-light p-4 rounded-xl icon-animate">
+        <img src="https://img.icons8.com/color/48/000000/tailwindcss.png" alt="Tailwind CSS" class="w-12 h-12" />
+        <span class="text-xs mt-1">Tailwind</span>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="max-w-3xl mx-auto py-16 px-6">
-    <h3 class="text-2xl font-bold mb-6 text-purple-700">Get in Touch</h3>
-    <form class="space-y-4">
-      <input type="text" placeholder="Name" class="w-full px-4 py-2 border rounded-lg" required />
-      <input type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg" required />
-      <textarea placeholder="Your Message" rows="4" class="w-full px-4 py-2 border rounded-lg" required></textarea>
-      <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700">Send Message</button>
-    </form>
+  <!-- Projects -->
+  <section id="projects" class="bg-[#231942] py-16 px-6 fade-in-up section-pad">
+    <div class="max-w-5xl mx-auto">
+      <h3 class="section-title mb-10 text-pink-400">Top Projects</h3>
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Project 1 -->
+        <div class="glass rounded-xl p-6 shadow-lg flex items-start gap-4 project-card cursor-pointer transition-all border border-pink-400/20">
+          <img src="https://img.icons8.com/color/48/000000/services--v2.png" alt="Moskey" class="w-12 h-12 mt-1" />
+          <div>
+          <h4 class="font-semibold text-lg mb-2">Moskey</h4>
+            <h5 class="text-sm text-gray-400 mb-2">IT Services Platform</h5>
+            <p class="text-sm text-gray-200 mb-3">A platform to choose and book IT services tailored to your needs. Includes hardware services, software training, and custom support.</p>
+            <a href="#" class="text-pink-400 text-sm font-medium hover:underline">Visit Site →</a>
+          </div>
+        </div>
+        
+
+        <!-- Project 2 -->
+        <div class="glass rounded-xl p-6 shadow-lg flex items-start gap-4 project-card cursor-pointer transition-all border border-pink-400/20">
+          <img src="https://img.icons8.com/color/48/000000/restaurant.png" alt="Green Line Biryani" class="w-12 h-12 mt-1" />
+          <div>
+          <h4 class="font-semibold text-lg mb-2">Hungi</h4>
+          <h5 class="text-sm text-gray-400 mb-2">Online Food Delivery App</h5>
+            <p class="text-sm text-gray-200 mb-3">This app connects with almost all local restaurant famous for its located in all local areas we are spreading ourselves in all over jharkhand famous for pizza,roll,burger,biryani. Menu, orders, and customer reviews all in one place.</p>
+            <a href="#" class="text-pink-400 text-sm font-medium hover:underline">View Project →</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
+  <!-- Moskey Project (Custom Section) -->
+  <section class="w-full py-20 px-4 fade-in-up section-pad" style="background: linear-gradient(120deg, #18122B 60%, #A21CAF 100%);">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-12">
+      <!-- Image -->
+      <div class="flex-1 flex justify-center md:justify-start">
+        <img src="https://naveenpoddar.github.io/portfolio/assets/moskey.png" alt="Moskey Project Screenshot" class="max-w-full md:max-w-lg rounded-xl shadow-2xl border border-gray-800" />
+      </div>
+      <!-- Content -->
+      <div class="flex-1 text-white glass p-8 rounded-2xl shadow-xl">
+        <h2 class="section-title mb-4 text-pink-400">Moskey (Coming Soon)</h2>
+        <p class="body-text text-lg md:text-xl mb-6 leading-relaxed text-gray-200">
+          Moskey uses Artificial Intelligence to suggest the best avilable computer/laptop deal for its customer, alongside that it provies pc services at a very resonable rate which none of any competitors offer. It's starting to educate people by adding courses to their services most of them are free.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-8">
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> HTML</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> CSS</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> Tailwind css</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> React</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> Node js</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> MongoDB</div>
+          <div class="flex items-center gap-2 text-lg"><span class="text-pink-400">✔</span> Next Js</div>
+        </div>
+        <a href="#" class="inline-block px-8 py-2 border border-pink-400 text-pink-400 rounded-lg font-semibold hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-500 hover:text-white transition shadow-lg glow-btn" style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem;">View Project</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education & Experience Section -->
+  <section id="education-experience" class="max-w-5xl mx-auto py-16 px-6 fade-in-up section-pad">
+    <h3 class="section-title mb-10 text-pink-400 text-center">Education & Experience</h3>
+    <div class="grid md:grid-cols-2 gap-10">
+      <!-- Education -->
+      <div class="glass rounded-2xl p-8 shadow-lg">
+        <h4 class="text-xl font-bold text-purple-300 mb-4" style="font-family: 'Montserrat', Arial, sans-serif;">Education</h4>
+        <ul class="space-y-5">
+          <li>
+            <div class="font-semibold text-pink-400">B.Tech in Electrical & Electronics Engineering</div>
+            <div class="text-gray-200">Jharkhand University Of Technology</div>
+            <div class="text-sm text-gray-400">2024 - 2027(Pursuing)</div>
+          </li>
+          <li>
+            <div class="font-semibold text-pink-400">Diploma in Electrical & Electronics Engineering</div>
+            <div class="text-gray-200">Jharkhand University of Technology</div>
+            <div class="text-sm text-gray-400">2020 - 2023</div>
+          </li>
+          <li>
+            <div class="font-semibold text-pink-400">Matriculation 10th</div>
+            <div class="text-gray-200">Central Board of Secondary Education (CBSE)</div>
+            <div class="text-sm text-gray-400">2019 - 2020</div>
+        </ul>
+      </div>
+      <!-- Experience -->
+      <div class="glass rounded-2xl p-8 shadow-lg">
+        <h4 class="text-xl font-bold text-purple-300 mb-4" style="font-family: 'Montserrat', Arial, sans-serif;">Experience</h4>
+        <ul class="space-y-5">
+          <li>
+            <div class="font-semibold text-pink-400">DRDO-OCXO Testing-Derive</div>
+            <div class="text-gray-200">Rakon India Private Limited, Bengaluru</div>
+            <div class="text-sm text-gray-400">6 Months</div>
+            <div class="text-gray-300 text-sm mt-1">I have to test the devices in an oven under varying temperatures. After that, I will analyze the graph and reject any devices that fail the criteria.
+            </div>
+          </li>
+          <li>
+            <div class="font-semibold text-pink-400">Cashify-Process Executive</div>
+            <div class="text-gray-200">Nimbus,BPO,Ranchi </div>
+            <div class="text-sm text-gray-400">6 Months</div>
+            <div class="text-gray-300 text-sm mt-1">Managed a blended customer service process, handling inquiries through phone calls, emails, and live chat, ensuring seamless customer experience across all channels.</div>
+          <li>
+            <div class="font-semibold text-pink-400">Blinkit-Supervisor</div>
+            <div class="text-gray-200">Woodrock,Softonic,Pvt,ltd,Kolkata </div>
+            <div class="text-sm text-gray-400">Remote(Currently Working)</div>
+            <div class="text-gray-300 text-sm mt-1">Managed a blended customer service process, handling Delivery Partners, ensuring seamless Rider Support experience across all channels.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SVG Divider -->
+  <svg class="w-full" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#231942" fill-opacity="1" d="M0,0 C480,80 960,0 1440,80 L1440,80 L0,80 Z"></path></svg>
+
+  <!-- Contact -->
+  <section id="contact" class="max-w-3xl mx-auto py-16 px-6 fade-in-up section-pad glass" style="background: rgba(24,18,43,0.85); border-radius: 1.5rem; box-shadow: 0 4px 32px 0 #a21caf33; border: 1.5px solid rgba(255,255,255,0.10);">
+    <h3 class="section-title mb-6 text-pink-400">Get in Touch</h3>
+    <form class="space-y-4" id="contactForm" onsubmit="return validateForm(event)">
+      <input type="text" placeholder="Name" class="w-full px-4 py-2 rounded-lg bg-[#18122B] border border-pink-400/30 text-white placeholder-gray-400 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40 transition" required id="name" />
+      <input type="email" placeholder="Email" class="w-full px-4 py-2 rounded-lg bg-[#18122B] border border-pink-400/30 text-white placeholder-gray-400 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40 transition" required id="email" />
+      <textarea placeholder="Your Message" rows="4" class="w-full px-4 py-2 rounded-lg bg-[#18122B] border border-pink-400/30 text-white placeholder-gray-400 focus:border-pink-400 focus:ring-2 focus:ring-pink-400/40 transition" required id="message"></textarea>
+      <button type="submit" class="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-400 text-white px-6 py-2 rounded-full shadow-lg hover:from-pink-400 hover:to-purple-600 glow-btn">Send Message</button>
+      <p id="formMsg" class="text-sm mt-2"></p>
+    </form>
+    <script>
+      function validateForm(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const formMsg = document.getElementById('formMsg');
+        if (!name || !email || !message) {
+          formMsg.textContent = 'Please fill in all fields.';
+          formMsg.className = 'text-red-600 text-sm mt-2';
+          return false;
+        }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+          formMsg.textContent = 'Please enter a valid email address.';
+          formMsg.className = 'text-red-600 text-sm mt-2';
+          return false;
+        }
+        formMsg.textContent = 'Thank you for reaching out!';
+        formMsg.className = 'text-green-600 text-sm mt-2';
+        document.getElementById('contactForm').reset();
+        return false;
+      }
+    </script>
+  </section>
+
+  <!-- SVG Divider -->
+  <svg class="w-full" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#18122B" fill-opacity="1" d="M0,80 C480,0 960,80 1440,0 L1440,80 L0,80 Z"></path></svg>
+
+  <!-- Gradient Accent Line Above Footer -->
+  <div class="w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-400 opacity-70 mb-[-1px]"></div>
+
   <!-- Footer -->
-  <footer class="text-center py-6 text-gray-500 text-sm bg-gray-100">
-    &copy; 2025 Praveen Poddar. All rights reserved.
+  <footer class="text-center py-8 text-gray-200 text-base bg-[#18122B]/80 flex flex-col items-center gap-4 border-t border-pink-400/20 fade-in-up glass" style="backdrop-filter: blur(18px); background: rgba(36,18,60,0.55);">
+    <div class="flex space-x-6 mb-2">
+      <a href="https://github.com/" target="_blank" class="hover:text-pink-400 social-icon relative icon-animate transition-all duration-200" aria-label="GitHub" tabindex="0" style="transition: transform 0.2s, box-shadow 0.2s;"><svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.7.42.36.79 1.09.79 2.2 0 1.59-.01 2.87-.01 3.26 0 .31.21.68.8.56C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg><span class="social-tooltip">GitHub</span></a>
+      <a href="https:www.linkedin.com/in/praveen-poddar-474384230/" target="_blank" class="hover:text-pink-400 social-icon relative icon-animate transition-all duration-200" aria-label="LinkedIn" tabindex="0" style="transition: transform 0.2s, box-shadow 0.2s;"><svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 11.28h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.88v1.36h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v5.59z"/></svg><span class="social-tooltip">LinkedIn</span></a>
+    </div>
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="text-pink-400 hover:underline text-xs font-semibold tracking-wide">Back to top ↑</button>
+    <span class="text-base font-medium tracking-wide opacity-80">&copy; 2025 Praveen Poddar. All rights reserved.</span>
   </footer>
 </body>
 </html>
